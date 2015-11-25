@@ -8,6 +8,7 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{StatusCodes, HttpResponse, HttpRequest}
 import akka.stream.scaladsl.ImplicitMaterializer
 import com.fasterxml.jackson.databind.ObjectMapper
+import de.bripkens.hsa.reporting.{Okay, SomethingIsWrong, CannotReach}
 
 import scala.concurrent.duration.Duration
 
@@ -36,10 +37,10 @@ class HealthCheckActor(val mapper: ObjectMapper,
 
   override def receive: Receive = {
     case "check" => http.singleRequest(HttpRequest(uri = endpoint.url)).pipeTo(self)
-    case HttpResponse(StatusCodes.OK, _, _, _) => log.info(s"Component ${endpoint.name} is okay.")
-    case response: HttpResponse => log.info(s"Component ${endpoint.name} is having problems.")
+    case HttpResponse(StatusCodes.OK, _, _, _) => reporter ! Okay(endpoint)
+    case response: HttpResponse => reporter ! SomethingIsWrong(endpoint)
     // TODO how can we differentiate between this and other errors?
-    case failure: Failure => log.info(s"Component ${endpoint.name} is not reachable")
+    case failure: Failure => reporter ! CannotReach(endpoint)
     case unsupported => log.error(s"Unsupported message received: $unsupported")
   }
 }
