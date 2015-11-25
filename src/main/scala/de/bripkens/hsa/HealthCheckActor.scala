@@ -3,7 +3,7 @@ package de.bripkens.hsa
 import java.util.concurrent.TimeUnit
 
 import akka.actor.Status.Failure
-import akka.actor.{ActorLogging, Actor}
+import akka.actor.{ActorRef, ActorLogging, Actor}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{StatusCodes, HttpResponse, HttpRequest}
 import akka.stream.scaladsl.ImplicitMaterializer
@@ -13,9 +13,10 @@ import scala.concurrent.duration.Duration
 
 class HealthCheckActor(val mapper: ObjectMapper,
                        val config: Configuration,
-                       val endpoint: HealthCheckEndpoint) extends Actor
-                                                          with ActorLogging
-                                                          with ImplicitMaterializer {
+                       val endpoint: HealthCheckEndpoint,
+                       val reporter: ActorRef) extends Actor
+                                               with ActorLogging
+                                               with ImplicitMaterializer {
 
   import context.dispatcher
 
@@ -37,7 +38,7 @@ class HealthCheckActor(val mapper: ObjectMapper,
     case "check" => http.singleRequest(HttpRequest(uri = endpoint.url)).pipeTo(self)
     case HttpResponse(StatusCodes.OK, _, _, _) => log.info(s"Component ${endpoint.name} is okay.")
     case response: HttpResponse => log.info(s"Component ${endpoint.name} is having problems.")
-    // how can we differentiate between this and other errors?
+    // TODO how can we differentiate between this and other errors?
     case failure: Failure => log.info(s"Component ${endpoint.name} is not reachable")
     case unsupported => log.error(s"Unsupported message received: $unsupported")
   }
