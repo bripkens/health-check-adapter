@@ -32,3 +32,4 @@ project/plugins/project/
 .worksheet
 
 
+src/test/resources/devConfig.private.yaml
