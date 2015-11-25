@@ -1,4 +1,14 @@
 ---
 endpoints:
   - url: http://127.0.0.1:8081/healthcheck
-    interval: 1000
+    id: uiBackend
+    name: ui-backend
+    interval: 3000
+  - url: http://127.0.0.1:8181/healthcheck
+    id: issueTracker
+    name: issue-tracker
+    interval: 3000
+  - url: http://127.0.0.1:8281/healthcheck
+    id: groundskeeper
+    name: groundskeeper
+    interval: 3000

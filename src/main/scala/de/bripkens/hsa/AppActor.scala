@@ -9,7 +9,7 @@ class AppActor(val mapper: ObjectMapper, val config: Configuration) extends Acto
   config.endpoints.foreach { endpoint =>
     context.actorOf(
       Props(classOf[HealthCheckActor], mapper, config, endpoint),
-      "healthCheck"
+      s"healthCheck-${endpoint.id}"
     )
   }
 

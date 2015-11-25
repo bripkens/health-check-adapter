@@ -2,9 +2,7 @@ package de.bripkens.hsa
 
 import java.nio.file.{NoSuchFileException, Paths, Files}
 import akka.actor.{Props, ActorSystem}
-import com.fasterxml.jackson.databind.{JsonMappingException, ObjectMapper}
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.fasterxml.jackson.databind.JsonMappingException
 
 object App extends scala.App {
 
@@ -20,7 +18,7 @@ object App extends scala.App {
   val configuration = loadConfig(configPath)
   Console.out.println("Config successfully loaded. Initializing actor system.")
 
-  implicit val system = ActorSystem("release-notifier")
+  implicit val system = ActorSystem("hsa")
 
   // the AppActor gets us started from here on out
   system.actorOf(Props(classOf[AppActor], mapper, configuration), "app")

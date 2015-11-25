@@ -7,4 +7,6 @@ case class Configuration(@JsonProperty("endpoints") endpoints: List[HealthCheckE
 
 @JsonCreator
 case class HealthCheckEndpoint(@JsonProperty("url") url: String,
+                               @JsonProperty("id") id: String,
+                               @JsonProperty("name") name: String,
                                @JsonProperty("interval") interval: Int)

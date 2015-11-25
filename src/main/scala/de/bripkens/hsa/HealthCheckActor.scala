@@ -2,6 +2,7 @@ package de.bripkens.hsa
 
 import java.util.concurrent.TimeUnit
 
+import akka.actor.Status.Failure
 import akka.actor.{ActorLogging, Actor}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{StatusCodes, HttpResponse, HttpRequest}
@@ -24,7 +25,7 @@ class HealthCheckActor(val mapper: ObjectMapper,
 
   private val http = Http(context.system)
 
-  log.info(s"Scheduling health checks for ${endpoint.url} every ${endpoint.interval} milliseconds")
+  log.info(s"Scheduling health checks for ${endpoint.name} (${endpoint.url}) every ${endpoint.interval} milliseconds")
   context.system.scheduler.schedule(
     Duration.Zero,
     Duration.create(endpoint.interval, TimeUnit.MILLISECONDS),
@@ -34,8 +35,10 @@ class HealthCheckActor(val mapper: ObjectMapper,
 
   override def receive: Receive = {
     case "check" => http.singleRequest(HttpRequest(uri = endpoint.url)).pipeTo(self)
-    case HttpResponse(StatusCodes.OK, _, _, _) => println(s"Component ${endpoint.url} is okay.")
-    case response: HttpResponse => log.info(s"Component ${endpoint.url} is having problems.")
+    case HttpResponse(StatusCodes.OK, _, _, _) => log.info(s"Component ${endpoint.name} is okay.")
+    case response: HttpResponse => log.info(s"Component ${endpoint.name} is having problems.")
+    // how can we differentiate between this and other errors?
+    case failure: Failure => log.info(s"Component ${endpoint.name} is not reachable")
     case unsupported => log.error(s"Unsupported message received: $unsupported")
   }
 }
