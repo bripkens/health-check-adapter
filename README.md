@@ -8,7 +8,7 @@ a message to a Slack channel.
 
 <p align="center">
   <img src="./screenshot.png"
-       alt="Screenshot showing the CLI"/>
+       alt="Screenshot showing the Slack integration"/>
 </p>
 
 *We are living in a weird world: This tool is not affiliated with Dr. Mario in any way and copyright belongs to Nintendo. You probably knew that, but you know how it is…*
