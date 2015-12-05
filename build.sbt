@@ -1,4 +1,4 @@
-name := "healthcheck-adapter"
+name := "health-check-adapter"
 
 version := "1.0"
 
