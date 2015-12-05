@@ -30,7 +30,7 @@ abstract class AbstractReporterConfig(@JsonProperty("type") reporterType: String
 
 case class SlackReporterConfig(@JsonProperty("type") reporterType: String,
                                @JsonProperty("channel") channel: String,
-                               @JsonProperty("token") token: String,
+                               @JsonProperty("webhookUrl") webhookUrl: String,
                                @JsonProperty("botName") botName: String,
                                @JsonProperty("botImage") botImage: String)
     extends AbstractReporterConfig(reporterType) {

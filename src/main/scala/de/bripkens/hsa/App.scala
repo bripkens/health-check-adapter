@@ -2,7 +2,9 @@ package de.bripkens.hsa
 
 import java.nio.file.{NoSuchFileException, Paths, Files}
 import akka.actor.{Props, ActorSystem}
-import com.fasterxml.jackson.databind.JsonMappingException
+import com.fasterxml.jackson.databind.{ObjectMapper, JsonMappingException}
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
 
 object App extends scala.App {
 
@@ -24,10 +26,13 @@ object App extends scala.App {
   system.actorOf(Props(classOf[AppActor], mapper, configuration), "app")
 
   def loadConfig(rawPath: String): Configuration = {
+    val yamlMapper = new ObjectMapper(new YAMLFactory())
+    yamlMapper.registerModule(DefaultScalaModule)
+
     try {
       val path = Paths.get(rawPath)
       val content = String.join("\n", Files.readAllLines(path))
-      mapper.readValue(content, classOf[Configuration])
+      yamlMapper.readValue(content, classOf[Configuration])
     } catch {
       case e: NoSuchFileException => reportCriticalInitialisationError(
         s"Config file $rawPath does not exist."

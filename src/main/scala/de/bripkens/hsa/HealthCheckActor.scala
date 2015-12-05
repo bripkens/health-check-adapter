@@ -36,6 +36,7 @@ class HealthCheckActor(val mapper: ObjectMapper,
   )
 
   override def receive: Receive = {
+    // TODO set short timeout
     case "check" => http.singleRequest(HttpRequest(uri = endpoint.url)).pipeTo(self)
     case HttpResponse(StatusCodes.OK, _, _, _) => {
       reporter ! ComponentStatusUpdate(endpoint, ComponentStatus.OKAY)
@@ -43,6 +44,7 @@ class HealthCheckActor(val mapper: ObjectMapper,
     case response: HttpResponse => {
       reporter ! ComponentStatusUpdate(endpoint, ComponentStatus.UNHEALTHY)
     }
+    // TODO handle request timeouts
     // TODO how can we differentiate between this and other errors?
     case failure: Failure => {
       reporter ! ComponentStatusUpdate(endpoint, ComponentStatus.NOT_REACHABLE)

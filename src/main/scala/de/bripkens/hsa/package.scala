@@ -8,7 +8,7 @@ import de.bripkens.hsa.ComponentStatus.ComponentStatus
 
 package object hsa {
 
-  val mapper = new ObjectMapper(new YAMLFactory())
+  val mapper = new ObjectMapper()
   mapper.registerModule(DefaultScalaModule)
 
   object ComponentStatus extends Enumeration {
