@@ -1,12 +1,12 @@
-package de.bripkens.hsa.reporting
+package de.bripkens.ha.reporting
 
 import akka.actor.{ActorLogging, Actor}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.stream.scaladsl.ImplicitMaterializer
 import com.fasterxml.jackson.databind.ObjectMapper
-import de.bripkens.hsa.ComponentStatus._
-import de.bripkens.hsa.{HealthCheckEndpoint, ComponentStatus, ComponentStatusUpdate, SlackReporterConfig}
+import de.bripkens.ha.ComponentStatus._
+import de.bripkens.ha.{HealthCheckEndpoint, ComponentStatus, ComponentStatusUpdate, SlackReporterConfig}
 
 import scala.collection.mutable
 

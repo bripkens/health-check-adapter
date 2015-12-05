@@ -1,4 +1,4 @@
-package de.bripkens.hsa
+package de.bripkens.ha
 
 import akka.actor.{Props, ActorLogging, Actor}
 import com.fasterxml.jackson.databind.ObjectMapper

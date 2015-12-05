@@ -1,7 +1,7 @@
-package de.bripkens.hsa
+package de.bripkens.ha
 
 import com.fasterxml.jackson.annotation.{JsonSubTypes, JsonTypeInfo, JsonProperty, JsonCreator}
-import de.bripkens.hsa.reporting.{ConsoleReporter, SlackReporter}
+import de.bripkens.ha.reporting.{ConsoleReporter, SlackReporter}
 
 @JsonCreator
 case class Configuration(@JsonProperty("endpoints") endpoints: Set[HealthCheckEndpoint],

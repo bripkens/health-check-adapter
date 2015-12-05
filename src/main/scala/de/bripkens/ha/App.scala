@@ -1,4 +1,4 @@
-package de.bripkens.hsa
+package de.bripkens.ha
 
 import java.nio.file.{NoSuchFileException, Paths, Files}
 import akka.actor.{Props, ActorSystem}
@@ -20,7 +20,7 @@ object App extends scala.App {
   val configuration = loadConfig(configPath)
   Console.out.println("Config successfully loaded. Initializing actor system.")
 
-  implicit val system = ActorSystem("hsa")
+  implicit val system = ActorSystem("ha")
 
   // the AppActor gets us started from here on out
   system.actorOf(Props(classOf[AppActor], mapper, configuration), "app")

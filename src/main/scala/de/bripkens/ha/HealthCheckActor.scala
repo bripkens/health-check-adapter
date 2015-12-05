@@ -1,4 +1,4 @@
-package de.bripkens.hsa
+package de.bripkens.ha
 
 import java.util.concurrent.TimeUnit
 

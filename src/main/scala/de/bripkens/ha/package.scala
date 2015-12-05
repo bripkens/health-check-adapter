@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.{JsonProperty, JsonCreator}
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import de.bripkens.hsa.ComponentStatus.ComponentStatus
+import de.bripkens.ha.ComponentStatus.ComponentStatus
 
-package object hsa {
+package object ha {
 
   val mapper = new ObjectMapper()
   mapper.registerModule(DefaultScalaModule)
