@@ -37,10 +37,16 @@ class HealthCheckActor(val mapper: ObjectMapper,
 
   override def receive: Receive = {
     case "check" => http.singleRequest(HttpRequest(uri = endpoint.url)).pipeTo(self)
-    case HttpResponse(StatusCodes.OK, _, _, _) => reporter ! Okay(endpoint)
-    case response: HttpResponse => reporter ! SomethingIsWrong(endpoint)
+    case HttpResponse(StatusCodes.OK, _, _, _) => {
+      reporter ! ComponentStatusUpdate(endpoint, ComponentStatus.OKAY)
+    }
+    case response: HttpResponse => {
+      reporter ! ComponentStatusUpdate(endpoint, ComponentStatus.UNHEALTHY)
+    }
     // TODO how can we differentiate between this and other errors?
-    case failure: Failure => reporter ! CannotReach(endpoint)
+    case failure: Failure => {
+      reporter ! ComponentStatusUpdate(endpoint, ComponentStatus.NOT_REACHABLE)
+    }
     case unsupported => log.error(s"Unsupported message received: $unsupported")
   }
 }
