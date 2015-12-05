@@ -17,6 +17,12 @@ class SlackReporter(val mapper: ObjectMapper, val config: SlackReporterConfig) e
                                                                                with ActorLogging
                                                                                with ImplicitMaterializer {
 
+  import context.dispatcher
+
+  // make the pipeTo method available (requires the ExecutionContextExecutor)
+  // on Future
+  import akka.pattern.pipe
+
   val componentStatus = new mutable.HashMap[String, ComponentStatus]()
 
   private val http = Http(context.system)
@@ -30,6 +36,11 @@ class SlackReporter(val mapper: ObjectMapper, val config: SlackReporterConfig) e
     }
     case ComponentStatusUpdate(component, ComponentStatus.NOT_REACHABLE, _) => {
       onStatusChange(component, ComponentStatus.NOT_REACHABLE, onUnreachable)
+    }
+    case response: HttpResponse => {
+      if (response.status != StatusCodes.OK) {
+        log.warning(s"Retrieved status code ${response.status} from the Slack API")
+      }
     }
     case unsupported => log.error(s"Unsupported message received: $unsupported")
   }
@@ -78,8 +89,7 @@ class SlackReporter(val mapper: ObjectMapper, val config: SlackReporterConfig) e
     )
     val entity = HttpEntity(ContentType(MediaTypes.`application/json`),
       mapper.writeValueAsString(payload))
-    // TODO handle potential request errors and log to console
-    http.singleRequest(HttpRequest(uri = config.webhookUrl, entity = entity))
+    http.singleRequest(HttpRequest(uri = config.webhookUrl, entity = entity)).pipeTo(self)
   }
 
 }
