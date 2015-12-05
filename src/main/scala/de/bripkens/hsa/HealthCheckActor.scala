@@ -9,7 +9,6 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{StatusCodes, HttpResponse, HttpRequest}
 import akka.stream.scaladsl.ImplicitMaterializer
 import com.fasterxml.jackson.databind.ObjectMapper
-import de.bripkens.hsa.reporting.{Okay, SomethingIsWrong, CannotReach}
 
 import scala.concurrent.{TimeoutException, Future}
 import scala.concurrent.duration._

@@ -3,7 +3,7 @@ package de.bripkens.hsa.reporting
 import akka.actor.{ActorLogging, Actor}
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.bripkens.hsa.ComponentStatus.ComponentStatus
-import de.bripkens.hsa.{HealthCheckEndpoint, ComponentStatus, ComponentStatusUpdate, ConsoleReporterConfig}
+import de.bripkens.hsa.{ComponentStatus, ComponentStatusUpdate, ConsoleReporterConfig}
 
 import scala.collection.mutable
 

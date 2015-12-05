@@ -1,12 +1,10 @@
 package de.bripkens.hsa
 
-import collection.JavaConversions._
 import java.nio.file.{NoSuchFileException, Paths, Files}
 import akka.actor.{Props, ActorSystem}
 import com.fasterxml.jackson.databind.{ObjectMapper, JsonMappingException}
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.typesafe.config.{ConfigFactory, Config}
 
 object App extends scala.App {
 

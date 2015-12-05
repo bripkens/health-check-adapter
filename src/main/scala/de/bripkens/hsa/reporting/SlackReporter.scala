@@ -1,8 +1,5 @@
 package de.bripkens.hsa.reporting
 
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
-
 import akka.actor.{ActorLogging, Actor}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
