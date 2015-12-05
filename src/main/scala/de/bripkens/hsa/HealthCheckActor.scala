@@ -2,6 +2,7 @@ package de.bripkens.hsa
 
 import java.util.concurrent.TimeUnit
 
+import akka.pattern.after
 import akka.actor.Status.Failure
 import akka.actor.{ActorRef, ActorLogging, Actor}
 import akka.http.scaladsl.Http
@@ -10,7 +11,8 @@ import akka.stream.scaladsl.ImplicitMaterializer
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.bripkens.hsa.reporting.{Okay, SomethingIsWrong, CannotReach}
 
-import scala.concurrent.duration.Duration
+import scala.concurrent.{TimeoutException, Future}
+import scala.concurrent.duration._
 
 class HealthCheckActor(val mapper: ObjectMapper,
                        val config: Configuration,
@@ -36,15 +38,20 @@ class HealthCheckActor(val mapper: ObjectMapper,
   )
 
   override def receive: Receive = {
-    // TODO set short timeout
-    case "check" => http.singleRequest(HttpRequest(uri = endpoint.url)).pipeTo(self)
+    case "check" => {
+      // okay, is this truly the way to do timeouts with Akka? Feels hackish…
+      Future.firstCompletedOf(
+        http.singleRequest(HttpRequest(uri = endpoint.url)) ::
+        after(2.second, context.system.scheduler)(Future.failed(new TimeoutException)) ::
+        Nil
+      ).pipeTo(self)
+    }
     case HttpResponse(StatusCodes.OK, _, _, _) => {
       reporter ! ComponentStatusUpdate(endpoint, ComponentStatus.OKAY)
     }
     case response: HttpResponse => {
       reporter ! ComponentStatusUpdate(endpoint, ComponentStatus.UNHEALTHY)
     }
-    // TODO handle request timeouts
     // TODO how can we differentiate between this and other errors?
     case failure: Failure => {
       reporter ! ComponentStatusUpdate(endpoint, ComponentStatus.NOT_REACHABLE)

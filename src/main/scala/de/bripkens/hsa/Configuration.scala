@@ -5,7 +5,8 @@ import de.bripkens.hsa.reporting.{ConsoleReporter, SlackReporter}
 
 @JsonCreator
 case class Configuration(@JsonProperty("endpoints") endpoints: Set[HealthCheckEndpoint],
-                         @JsonProperty("reporters") reporters: Map[String, AbstractReporterConfig])
+                         @JsonProperty("reporters") reporters: Map[String, AbstractReporterConfig],
+                         @JsonProperty("akka") akkaConfig: Map[String, _ <: AnyRef])
 
 @JsonCreator
 case class HealthCheckEndpoint(@JsonProperty("url") url: String,
