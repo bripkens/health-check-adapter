@@ -1,4 +1,4 @@
-<h1 align="center">Health Check Adapter</h1>
+<h1 align="center">Health Check Adapter (HCA)</h1>
 <p align="center">Send health check changes to Slack</p>
 
 [![](https://badge.imagelayers.io/bripkens/health-check-adapter:latest.svg)](https://imagelayers.io/?images=bripkens/health-check-adapter:latest 'Get your own badge on imagelayers.io')
@@ -34,14 +34,42 @@ The mechanism is currently very simple:
    prints to the console.
 
 ## Usage
-There is no ready made distribution of mechanism for this health check
-adapter in place. It would be neat to distribute this adapter as a Docker
-image. If this sounds useful to you, get in touch and we can discuss strategy.
+There are currently two known usage patterns. The first and recommended one is
+via a Docker container. The other one is the compilation from source.
 
+### Docker Container
+The Docker image is
+[published to Docker Hub](https://hub.docker.com/r/bripkens/health-check-adapter/).
+This makes it comfortable if you already have Docker configured. Care was taken
+to follow Docker best practices and to a have a proper init process. Image usage
+is easy and the only additional thing you will need is a configuration file for
+the health checks.
+
+The health check adapter expects a config file to exist at
+`/opt/health-check-adapter/config/config.yaml` within the container. To place
+a config file at this location you can either create a derived image which
+copies a config to this location or you can make use of volumes. The following
+example shows how you can run the health check adapter in a Docker container
+using volumes.
+
+```
+docker run -v "`pwd`:/opt/health-check-adapter/config" \
+       --name hca \
+       bripkens/health-check-adapter
+```
+
+The command will start a Docker container and mount the current working
+directory at `/opt/health-check-adapter/config` within the container. This
+means that we can place a `config.yaml` into the current working directory
+in order to configure the health check adapter.
+
+### Manual Setup
+There is no distribution of the compiled application besides the Docker image.
+This means that you will need to compile it from source in all other cases
 To get this up and running manually…
 
  - clone this repository,
- - build the project and
+ - build the project, e.g. `sbt assembly` and
  - execute it with the main class `de.bripkens.ha.App` and the path to the
    config file as its only argument.
 
