@@ -1,4 +1,4 @@
-*.private.*
+/config.yaml
 
 ### https://raw.github.com/github/gitignore/fcce3b8de0e4b7a1c525ad4867f4ce8af4990854/Global/sbt.gitignore
 

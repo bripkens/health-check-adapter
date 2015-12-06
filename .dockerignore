@@ -1,5 +1,3 @@
-/src/
-/test/
-/project/
-/target/*
-!/target/scala-2.11/health-check-adapter.jar
+/src/*
+/project/*
+config.yaml
