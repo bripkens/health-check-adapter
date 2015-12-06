@@ -7,6 +7,13 @@ IMAGE_NAME="bripkens/health-check-adapter"
 revision="`git rev-parse HEAD`"
 now="`date -u +'%Y-%m-%dT%H:%M:%SZ'`"
 
+if [[ "$@" == "--release" ]]
+then
+  echo "Cleaning target dir due to release..."
+  rm -rf target/
+fi
+
+
 echo "Attempting JAR build of revision $revision at $now..."
 sbt assembly
 
