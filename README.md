@@ -16,6 +16,28 @@ a message to a Slack channel.
 
 *We are living in a weird world: This tool is not affiliated with Dr. Mario in any way and copyright belongs to Nintendo. You probably knew that, but you know how it is…*
 
+## What is a Health Check?
+Health checks are tests that are executed as part of a running application
+to verify that an application is functioning correctly in production.
+Such tests can be used to verify that database connections are possible or
+that third party services are responding. Health checks are often easy to
+write and can be very helpful to get a quick understanding of an
+application's status.
+
+Health checks are typically some kind of callable resource, e.g. an HTTP
+endpoint or a JMX MBean. Frameworks like [Dropwizard](http://www.dropwizard.io/)
+make it easy to
+[add health checks to an application](http://www.dropwizard.io/0.9.1/docs/getting-started.html#creating-a-health-check).
+Dropwizard automatically exposes these health checks on
+an admin port for remote execution. This means that health checks can
+easily be integrated into continuous integration jobs or tools like this.
+
+This health check adapter specifically expects health checks to be callable
+via HTTP(S). It does not yet have support for MBeans or other mechanisms.
+Refer to the following section to understand the HTTP resources' expected
+response types. It is important to note that this tool is not restricted to
+Dropwizard. Any HTTP based health check endpoint can be integrated!
+
 ## How It Works
 The mechanism is currently very simple:
 
