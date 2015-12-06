@@ -1,4 +1,4 @@
-<h1 align="center">Health Check Adapter (HCA)</h1>
+<h1 align="center">Health Check Adapter</h1>
 <p align="center">Send health check changes to Slack</p>
 
 [![](https://badge.imagelayers.io/bripkens/health-check-adapter:latest.svg)](https://imagelayers.io/?images=bripkens/health-check-adapter:latest 'Get your own badge on imagelayers.io')
@@ -54,7 +54,7 @@ using volumes.
 
 ```
 docker run -v "`pwd`:/opt/health-check-adapter/config" \
-       --name hca \
+       --name health-check-adapter \
        bripkens/health-check-adapter
 ```
 
@@ -62,6 +62,9 @@ The command will start a Docker container and mount the current working
 directory at `/opt/health-check-adapter/config` within the container. This
 means that we can place a `config.yaml` into the current working directory
 in order to configure the health check adapter.
+
+Application logging is enabled and logs are stored at
+`/var/log/health-check-adapter.log`. 
 
 ### Manual Setup
 There is no distribution of the compiled application besides the Docker image.
@@ -126,7 +129,7 @@ image locally via:
 
 ```
 docker run -v "`pwd`/src/test/resources:/opt/health-check-adapter/config" \
-       --name hca \
+       --name health-check-adapter \
        bripkens/health-check-adapter
 ```
 

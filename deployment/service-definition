@@ -5,4 +5,4 @@
 
 /usr/bin/java -jar \
               /opt/health-check-adapter/health-check-adapter.jar \
-              /opt/health-check-adapter/config/config.yaml >> /var/log/hca.log 2>&1
+              /opt/health-check-adapter/config/config.yaml >> /var/log/health-check-adapter.log 2>&1
