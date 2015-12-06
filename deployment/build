@@ -16,7 +16,14 @@ docker build --tag "$IMAGE_NAME:latest" \
              --build-arg now=$now \
              .
 
-docker tag "$IMAGE_NAME" "$IMAGE_NAME:$revision"
 
-docker push "$IMAGE_NAME:$revision"
-docker push "$IMAGE_NAME:latest"
+if [[ "$@" == "--release" ]]
+then
+  echo "Actually pushing images..."
+  docker tag "$IMAGE_NAME" "$IMAGE_NAME:$revision"
+
+  docker push "$IMAGE_NAME:$revision"
+  docker push "$IMAGE_NAME:latest"
+else
+  echo "Skipping Docker Hub push..."
+fi

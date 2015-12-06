@@ -89,10 +89,25 @@ reporters:
   reporter exist. Feel free to open a pull request to add another reporting
   integration!
 
-## Releasing a new Docker image
+## Contributing
+
+### Working on the Docker image
+To work on the image, you can execute the `./deployment/build` script. It
+will build the project and the Docker image. You can even try the Docker
+image locally via:
+
+```
+docker run -v "`pwd`/src/test/resources:/opt/health-check-adapter/config" \
+       --name hca \
+       bripkens/health-check-adapter
+```
+
+### Releasing a new Docker image
 Make sure that you are signed in to Docker Hub via `docker login` and then
-execute the `./build-docker` script. The script will build the project, build
-the new Docker image and push it to Docker Hub.
+execute the `./deployment/build --release` script. The script will build the
+project, build the new Docker image and push it to Docker Hub. The script
+will only push to Docker Hub when the `--release` parameter is specified.
+This is useful for local development purposes.
 
 ## License (MIT)
 The MIT License (MIT)

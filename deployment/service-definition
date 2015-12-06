@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# This file is part of the health-check-adapter service definition.
+# Meaning: It is used as part of the public Docker image.
+
+/usr/bin/java -jar \
+              /opt/health-check-adapter/health-check-adapter.jar \
+              /opt/health-check-adapter/config/config.yaml >> /var/log/hca.log 2>&1
