@@ -1,7 +1,8 @@
 <h1 align="center">Health Check Adapter</h1>
 <p align="center">Send health check changes to Slack</p>
 
-[![](https://badge.imagelayers.io/bripkens/health-check-adapter:latest.svg)](https://imagelayers.io/?images=bripkens/health-check-adapter:latest 'Get your own badge on imagelayers.io')
+[![Docker Layer Info](https://badge.imagelayers.io/bripkens/health-check-adapter:latest.svg)](https://imagelayers.io/?images=bripkens/health-check-adapter:latest 'Get your own badge on imagelayers.io') 
+[![Build Status](https://travis-ci.org/bripkens/health-check-adapter.svg)](https://travis-ci.org/bripkens/health-check-adapter)
 
 This application connects to one or more applications and
 continuously calls the applications' health check endpoint to determine
