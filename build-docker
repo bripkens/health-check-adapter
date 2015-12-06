@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -e
+
+IMAGE_NAME="bripkens/health-check-adapter"
+
+revision="`git rev-parse HEAD`"
+now="`date -u +'%Y-%m-%dT%H:%M:%SZ'`"
+
+echo "Attempting JAR build of revision $revision at $now..."
+sbt assembly
+
+echo "JAR build successful. Building Docker image..."
+docker build --tag "$IMAGE_NAME:latest" \
+             --build-arg revision=$revision \
+             --build-arg now=$now \
+             .
+
+docker tag "$IMAGE_NAME" "$IMAGE_NAME:$revision"
+
+docker push "$IMAGE_NAME:$revision"
+docker push "$IMAGE_NAME:latest"

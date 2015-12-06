@@ -1,6 +1,8 @@
 <h1 align="center">Health Check Adapter</h1>
 <p align="center">Send health check changes to Slack</p>
 
+[![](https://badge.imagelayers.io/bripkens/health-check-adapter:latest.svg)](https://imagelayers.io/?images=bripkens/health-check-adapter:latest 'Get your own badge on imagelayers.io')
+
 This application connects to one or more applications and
 continuously calls the applications' health check endpoint to determine
 the applications' health. When the health status changes, it will send
@@ -86,6 +88,11 @@ reporters:
   check adapter has a concept of reporters. Currently only a Slack and console
   reporter exist. Feel free to open a pull request to add another reporting
   integration!
+
+## Releasing a new Docker image
+Make sure that you are signed in to Docker Hub via `docker login` and then
+execute the `./build-docker` script. The script will build the project, build
+the new Docker image and push it to Docker Hub.
 
 ## License (MIT)
 The MIT License (MIT)
