@@ -3,6 +3,6 @@
 # This file is part of the health-check-adapter service definition.
 # Meaning: It is used as part of the public Docker image.
 
-/usr/bin/java -jar \
+exec /usr/bin/java -jar \
               /opt/health-check-adapter/health-check-adapter.jar \
               /opt/health-check-adapter/config/config.yaml 2>&1 | logger -t health-check-adapter
