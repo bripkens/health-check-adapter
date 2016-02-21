@@ -13,6 +13,7 @@ libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-
 val akkaCoreVersion = "2.4.0"
 libraryDependencies += "com.typesafe.akka" %% "akka-actor" % akkaCoreVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-contrib" % akkaCoreVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % akkaCoreVersion % "test"
 
 val akkaExtensionsVersion = "2.0-M1"
 libraryDependencies += "com.typesafe.akka" % "akka-stream-experimental_2.11" % akkaExtensionsVersion
