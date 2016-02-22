@@ -28,7 +28,7 @@ class AppActor(val mapper: ObjectMapper, val config: Configuration) extends Acto
     }
     val reporter = reporters(endpoint.reporter)
     context.actorOf(
-      Props(classOf[HealthCheckActor], mapper, config, endpoint, reporter),
+      HealthCheckActor.props(mapper, config, endpoint, reporter),
       s"healthCheck-${endpoint.id}"
     )
   }

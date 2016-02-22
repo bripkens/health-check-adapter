@@ -2,16 +2,25 @@ package de.bripkens.ha
 
 import java.util.concurrent.TimeUnit
 
-import akka.pattern.after
 import akka.actor.Status.Failure
-import akka.actor.{ActorRef, ActorLogging, Actor}
+import akka.actor.{Props, Actor, ActorLogging, ActorRef}
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.{StatusCodes, HttpResponse, HttpRequest}
+import akka.http.scaladsl.model.{HttpRequest, HttpResponse, StatusCodes}
+import akka.pattern.after
 import akka.stream.scaladsl.ImplicitMaterializer
 import com.fasterxml.jackson.databind.ObjectMapper
 
-import scala.concurrent.{TimeoutException, Future}
 import scala.concurrent.duration._
+import scala.concurrent.{Future, TimeoutException}
+
+object HealthCheckActor {
+
+  def props(mapper: ObjectMapper,
+            config: Configuration,
+            endpoint: HealthCheckEndpoint,
+            reporter: ActorRef) = Props(new HealthCheckActor(mapper, config, endpoint, reporter))
+
+}
 
 class HealthCheckActor(val mapper: ObjectMapper,
                        val config: Configuration,
