@@ -3,6 +3,13 @@ package de.bripkens.ha
 import akka.actor.{Props, ActorLogging, Actor}
 import com.fasterxml.jackson.databind.ObjectMapper
 
+object AppActor {
+
+  final val Name = "app"
+
+  def props(mapper: ObjectMapper, config: Configuration) = Props(new AppActor(mapper, config))
+}
+
 class AppActor(val mapper: ObjectMapper, val config: Configuration) extends Actor
                                                                     with ActorLogging {
 
