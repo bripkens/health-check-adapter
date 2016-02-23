@@ -16,26 +16,23 @@ object App extends scala.App {
   val configPath = args(0)
   Console.out.println(s"Starting with config file $configPath")
 
-  val configuration = loadConfig(configPath)
-  Console.out.println("Config successfully loaded. Initializing actor system.")
+  Configuration.load(Paths.get(configPath)) match {
+    case Left(e: NoSuchFileException) => reportCriticalInitialisationError(
+      s"Config file $configPath does not exist."
+    )
+    case Left(e: JsonMappingException) => reportCriticalInitialisationError(
+      s"Config file $configPath could not be parsed. Error: ${e.getMessage}"
+    )
+    case Right(configuration) => startActorSystem(configuration)
+  }
 
-  implicit val system = ActorSystem("ha")
+  def startActorSystem(configuration: Configuration) = {
+    Console.out.println("Config successfully loaded. Initializing actor system.")
 
-  // the AppActor gets us started from here on out
-  system.actorOf(Props(classOf[AppActor], mapper, configuration), "app")
+    implicit val system = ActorSystem("ha")
 
-  def loadConfig(rawPath: String): Configuration = {
-    Configuration.load(Paths.get(rawPath)) match {
-      case Left(_: NoSuchFileException) => reportCriticalInitialisationError(
-        s"Config file $rawPath does not exist."
-      )
-      null
-      case Left(e: JsonMappingException) => reportCriticalInitialisationError(
-        s"Config file $rawPath could not be parsed. Error: ${e.getMessage}"
-      )
-      null
-      case Right(conf) => conf
-    }
+    // the AppActor gets us started from here on out
+    system.actorOf(Props(classOf[AppActor], mapper, configuration), "app")
   }
 
   def reportCriticalInitialisationError(msg: String): Unit = {
