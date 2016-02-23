@@ -1,10 +1,9 @@
 package de.bripkens.ha
 
-import java.nio.file.{NoSuchFileException, Paths, Files}
-import akka.actor.{Props, ActorSystem}
-import com.fasterxml.jackson.databind.{ObjectMapper, JsonMappingException}
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import java.nio.file.{Paths, NoSuchFileException}
+
+import akka.actor.{ActorSystem, Props}
+import com.fasterxml.jackson.databind.JsonMappingException
 
 object App extends scala.App {
 
@@ -26,22 +25,16 @@ object App extends scala.App {
   system.actorOf(Props(classOf[AppActor], mapper, configuration), "app")
 
   def loadConfig(rawPath: String): Configuration = {
-    val yamlMapper = new ObjectMapper(new YAMLFactory())
-    yamlMapper.registerModule(DefaultScalaModule)
-
-    try {
-      val path = Paths.get(rawPath)
-      val content = String.join("\n", Files.readAllLines(path))
-      yamlMapper.readValue(content, classOf[Configuration])
-    } catch {
-      case e: NoSuchFileException => reportCriticalInitialisationError(
+    Configuration.load(Paths.get(rawPath)) match {
+      case Left(_: NoSuchFileException) => reportCriticalInitialisationError(
         s"Config file $rawPath does not exist."
       )
       null
-      case e: JsonMappingException => reportCriticalInitialisationError(
+      case Left(e: JsonMappingException) => reportCriticalInitialisationError(
         s"Config file $rawPath could not be parsed. Error: ${e.getMessage}"
       )
       null
+      case Right(conf) => conf
     }
   }
 

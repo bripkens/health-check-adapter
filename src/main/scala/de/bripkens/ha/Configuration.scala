@@ -1,7 +1,28 @@
 package de.bripkens.ha
 
-import com.fasterxml.jackson.annotation.{JsonSubTypes, JsonTypeInfo, JsonProperty, JsonCreator}
+import java.nio.file.{Path, Files, NoSuchFileException, Paths}
+
+import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty, JsonSubTypes, JsonTypeInfo}
+import com.fasterxml.jackson.databind.{JsonMappingException, ObjectMapper}
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import de.bripkens.ha.reporting.{ConsoleReporter, SlackReporter}
+
+object Configuration {
+
+  def load(path: Path): Either[Exception, Configuration] = {
+    val yamlMapper = new ObjectMapper(new YAMLFactory())
+    yamlMapper.registerModule(DefaultScalaModule)
+
+    try {
+      val content = String.join("\n", Files.readAllLines(path))
+      Right(yamlMapper.readValue(content, classOf[Configuration]))
+    } catch {
+      case e: NoSuchFileException => Left(e);
+      case e: JsonMappingException => Left(e);
+    }
+  }
+}
 
 @JsonCreator
 case class Configuration(@JsonProperty("endpoints") endpoints: Set[HealthCheckEndpoint],
