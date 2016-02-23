@@ -1,6 +1,6 @@
 package de.bripkens.ha
 
-import java.nio.file.{Path, Files, NoSuchFileException, Paths}
+import java.nio.file.{Files, NoSuchFileException, Path}
 
 import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty, JsonSubTypes, JsonTypeInfo}
 import com.fasterxml.jackson.databind.{JsonMappingException, ObjectMapper}
@@ -8,18 +8,17 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import de.bripkens.ha.reporting.{ConsoleReporter, SlackReporter}
 
+import scala.util.control.Exception._
+
 object Configuration {
 
-  def load(path: Path): Either[Exception, Configuration] = {
+  def load(path: Path): Either[Throwable, Configuration] = {
     val yamlMapper = new ObjectMapper(new YAMLFactory())
     yamlMapper.registerModule(DefaultScalaModule)
 
-    try {
+    catching(classOf[NoSuchFileException], classOf[JsonMappingException]) either {
       val content = String.join("\n", Files.readAllLines(path))
-      Right(yamlMapper.readValue(content, classOf[Configuration]))
-    } catch {
-      case e: NoSuchFileException => Left(e);
-      case e: JsonMappingException => Left(e);
+      yamlMapper.readValue(content, classOf[Configuration])
     }
   }
 }
@@ -55,11 +54,11 @@ case class SlackReporterConfig(@JsonProperty("type") reporterType: String,
                                @JsonProperty("webhookUrl") webhookUrl: String,
                                @JsonProperty("botName") botName: String,
                                @JsonProperty("botImage") botImage: String)
-    extends AbstractReporterConfig(reporterType) {
+  extends AbstractReporterConfig(reporterType) {
   override val implementation = classOf[SlackReporter]
 }
 
 case class ConsoleReporterConfig(@JsonProperty("type") reporterType: String)
-    extends AbstractReporterConfig(reporterType) {
+  extends AbstractReporterConfig(reporterType) {
   override val implementation = classOf[ConsoleReporter]
 }
