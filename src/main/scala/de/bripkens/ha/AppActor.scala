@@ -2,7 +2,7 @@ package de.bripkens.ha
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import com.fasterxml.jackson.databind.ObjectMapper
-import de.bripkens.ha.reporting.{SlackReporter, ConsoleReporter}
+import de.bripkens.ha.reporting.{ConsoleReporter, SlackReporter}
 
 object AppActor {
 
@@ -17,12 +17,9 @@ class AppActor(val mapper: ObjectMapper, val config: Configuration) extends Acto
   val reporters = config.reporters.map(config2Actor)
 
   def config2Actor(entry: (String, AbstractReporterConfig)): (String, ActorRef) = {
-    val consoleReporterClass = classOf[ConsoleReporter]
-    val slackReporterClass = classOf[SlackReporter]
-
-    val props = entry._2.implementation match {
-      case consoleReporterClass => Props(new ConsoleReporter(mapper, config.asInstanceOf[ConsoleReporterConfig]))
-      case slackReporterClass => Props(new SlackReporter(mapper, config.asInstanceOf[SlackReporterConfig]))
+    val props = entry._2 match {
+      case crc@ConsoleReporterConfig(_)           => Props(new ConsoleReporter(mapper, crc))
+      case src@SlackReporterConfig(_, _, _, _, _) => Props(new SlackReporter(mapper, src))
     }
 
     val actor = context.actorOf(props, s"reporter-${entry._1}")
