@@ -1,6 +1,6 @@
 package de.bripkens.ha.reporting
 
-import akka.actor.{ActorLogging, Actor}
+import akka.actor.{Props, ActorLogging, Actor}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.stream.scaladsl.ImplicitMaterializer
@@ -9,6 +9,12 @@ import de.bripkens.ha.ComponentStatus._
 import de.bripkens.ha.{HealthCheckEndpoint, ComponentStatus, ComponentStatusUpdate, SlackReporterConfig}
 
 import scala.collection.mutable
+
+object SlackReporter {
+
+  def props(mapper: ObjectMapper, config: SlackReporterConfig) = Props(new SlackReporter(mapper, config))
+
+}
 
 class SlackReporter(val mapper: ObjectMapper, val config: SlackReporterConfig) extends Actor
                                                                                with ActorLogging
