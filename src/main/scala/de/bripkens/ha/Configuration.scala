@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty, JsonSubTypes
 import com.fasterxml.jackson.databind.{JsonMappingException, ObjectMapper}
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import de.bripkens.ha.reporting.{ConsoleReporter, SlackReporter}
 
 import scala.util.control.Exception._
 
@@ -45,20 +44,14 @@ case class HealthCheckEndpoint(@JsonProperty("url") url: String,
   new JsonSubTypes.Type(value = classOf[SlackReporterConfig], name = "slack"),
   new JsonSubTypes.Type(value = classOf[ConsoleReporterConfig], name = "console")
 ))
-abstract class AbstractReporterConfig(@JsonProperty("type") reporterType: String) {
-  val implementation: Class[_]
-}
+abstract class AbstractReporterConfig(@JsonProperty("type") reporterType: String)
 
 case class SlackReporterConfig(@JsonProperty("type") reporterType: String,
                                @JsonProperty("channel") channel: String,
                                @JsonProperty("webhookUrl") webhookUrl: String,
                                @JsonProperty("botName") botName: String,
                                @JsonProperty("botImage") botImage: String)
-  extends AbstractReporterConfig(reporterType) {
-  override val implementation = classOf[SlackReporter]
-}
+  extends AbstractReporterConfig(reporterType)
 
 case class ConsoleReporterConfig(@JsonProperty("type") reporterType: String)
-  extends AbstractReporterConfig(reporterType) {
-  override val implementation = classOf[ConsoleReporter]
-}
+  extends AbstractReporterConfig(reporterType)
