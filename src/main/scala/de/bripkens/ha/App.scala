@@ -1,10 +1,9 @@
 package de.bripkens.ha
 
-import java.nio.file.{NoSuchFileException, Paths, Files}
-import akka.actor.{Props, ActorSystem}
-import com.fasterxml.jackson.databind.{ObjectMapper, JsonMappingException}
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import java.nio.file.{Paths, NoSuchFileException}
+
+import akka.actor.{ActorSystem, Props}
+import com.fasterxml.jackson.databind.JsonMappingException
 
 object App extends scala.App {
 
@@ -17,32 +16,23 @@ object App extends scala.App {
   val configPath = args(0)
   Console.out.println(s"Starting with config file $configPath")
 
-  val configuration = loadConfig(configPath)
-  Console.out.println("Config successfully loaded. Initializing actor system.")
+  Configuration.load(Paths.get(configPath)) match {
+    case Left(e: NoSuchFileException) => reportCriticalInitialisationError(
+      s"Config file $configPath does not exist."
+    )
+    case Left(e: JsonMappingException) => reportCriticalInitialisationError(
+      s"Config file $configPath could not be parsed. Error: ${e.getMessage}"
+    )
+    case Right(configuration) => startActorSystem(configuration)
+  }
 
-  implicit val system = ActorSystem("ha")
+  def startActorSystem(configuration: Configuration) = {
+    Console.out.println("Config successfully loaded. Initializing actor system.")
 
-  // the AppActor gets us started from here on out
-  system.actorOf(Props(classOf[AppActor], mapper, configuration), "app")
+    implicit val system = ActorSystem("ha")
 
-  def loadConfig(rawPath: String): Configuration = {
-    val yamlMapper = new ObjectMapper(new YAMLFactory())
-    yamlMapper.registerModule(DefaultScalaModule)
-
-    try {
-      val path = Paths.get(rawPath)
-      val content = String.join("\n", Files.readAllLines(path))
-      yamlMapper.readValue(content, classOf[Configuration])
-    } catch {
-      case e: NoSuchFileException => reportCriticalInitialisationError(
-        s"Config file $rawPath does not exist."
-      )
-      null
-      case e: JsonMappingException => reportCriticalInitialisationError(
-        s"Config file $rawPath could not be parsed. Error: ${e.getMessage}"
-      )
-      null
-    }
+    // the AppActor gets us started from here on out
+    system.actorOf(Props(classOf[AppActor], mapper, configuration), "app")
   }
 
   def reportCriticalInitialisationError(msg: String): Unit = {
