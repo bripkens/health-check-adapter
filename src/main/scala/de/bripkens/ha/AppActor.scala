@@ -16,7 +16,7 @@ class AppActor(val mapper: ObjectMapper, val config: Configuration) extends Acto
 
   val reporters = config.reporters.map(config2Actor)
 
-  def config2Actor(entry: (String, AbstractReporterConfig)): (String, ActorRef) = {
+  def config2Actor(entry: (String, ReporterConfig)): (String, ActorRef) = {
     val props = entry._2 match {
       case config@ConsoleReporterConfig(_)           => ConsoleReporter.props(mapper, config)
       case config@SlackReporterConfig(_, _, _, _, _) => SlackReporter.props(mapper, config)

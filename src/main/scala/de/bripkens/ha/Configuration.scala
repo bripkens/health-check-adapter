@@ -24,7 +24,7 @@ object Configuration {
 
 @JsonCreator
 case class Configuration(@JsonProperty("endpoints") endpoints: Set[HealthCheckEndpoint],
-                         @JsonProperty("reporters") reporters: Map[String, AbstractReporterConfig],
+                         @JsonProperty("reporters") reporters: Map[String, ReporterConfig],
                          @JsonProperty("akka") akkaConfig: Map[String, _ <: AnyRef])
 
 @JsonCreator
@@ -44,14 +44,14 @@ case class HealthCheckEndpoint(@JsonProperty("url") url: String,
   new JsonSubTypes.Type(value = classOf[SlackReporterConfig], name = "slack"),
   new JsonSubTypes.Type(value = classOf[ConsoleReporterConfig], name = "console")
 ))
-abstract class AbstractReporterConfig(@JsonProperty("type") reporterType: String)
+sealed trait ReporterConfig
 
 case class SlackReporterConfig(@JsonProperty("type") reporterType: String,
                                @JsonProperty("channel") channel: String,
                                @JsonProperty("webhookUrl") webhookUrl: String,
                                @JsonProperty("botName") botName: String,
                                @JsonProperty("botImage") botImage: String)
-  extends AbstractReporterConfig(reporterType)
+  extends ReporterConfig
 
 case class ConsoleReporterConfig(@JsonProperty("type") reporterType: String)
-  extends AbstractReporterConfig(reporterType)
+  extends ReporterConfig
