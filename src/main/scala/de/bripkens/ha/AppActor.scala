@@ -1,6 +1,6 @@
 package de.bripkens.ha
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import akka.actor.{Actor, ActorLogging, Props}
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.bripkens.ha.reporting.{ConsoleReporter, SlackReporter}
 
@@ -14,16 +14,14 @@ object AppActor {
 class AppActor(val mapper: ObjectMapper, val config: Configuration) extends Actor
                                                                     with ActorLogging {
 
-  val reporters = config.reporters.map(config2Actor)
-
-  def config2Actor(entry: (String, ReporterConfig)): (String, ActorRef) = {
-    val props = entry._2 match {
+  val reporters = config.reporters.map{ case (name, reporterConfig) => 
+    val props = reporterConfig match {
       case config@ConsoleReporterConfig(_)           => ConsoleReporter.props(mapper, config)
       case config@SlackReporterConfig(_, _, _, _, _) => SlackReporter.props(mapper, config)
     }
 
-    val actor = context.actorOf(props, s"reporter-${entry._1}")
-    (entry._1, actor)
+    val actor = context.actorOf(props, s"reporter-$name")
+    (name, actor)
   }
 
   config.endpoints.foreach { endpoint =>
