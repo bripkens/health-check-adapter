@@ -19,7 +19,6 @@ object HealthCheckActor {
             config: Configuration,
             endpoint: HealthCheckEndpoint,
             reporter: ActorRef) = Props(new HealthCheckActor(mapper, config, endpoint, reporter))
-
 }
 
 class HealthCheckActor(val mapper: ObjectMapper,
