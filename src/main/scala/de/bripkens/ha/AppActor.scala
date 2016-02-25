@@ -14,10 +14,10 @@ object AppActor {
 class AppActor(val mapper: ObjectMapper, val config: Configuration) extends Actor
                                                                     with ActorLogging {
 
-  val reporters = config.reporters.map{ case (name, reporterConfig) => 
+  val reporters = config.reporters.map{ case (name, reporterConfig) =>
     val props = reporterConfig match {
-      case config@ConsoleReporterConfig(_)           => ConsoleReporter.props(mapper, config)
-      case config@SlackReporterConfig(_, _, _, _, _) => SlackReporter.props(mapper, config)
+      case config: ConsoleReporterConfig => ConsoleReporter.props(mapper, config)
+      case config: SlackReporterConfig   => SlackReporter.props(mapper, config)
     }
 
     val actor = context.actorOf(props, s"reporter-$name")
