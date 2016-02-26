@@ -30,5 +30,13 @@ class ConsoleReporterSpec extends BaseAkkaSpec {
       }
 
     }
+
+    "log a warning when it receives an unknown message" in {
+      val reporter = system.actorOf(Props(new ConsoleReporter(new ObjectMapper, new ConsoleReporterConfig(""))))
+
+      EventFilter.warning(occurrences = 1).intercept {
+        reporter ! "unknown message"
+      }
+    }
   }
 }
