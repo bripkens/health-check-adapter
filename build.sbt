@@ -10,7 +10,7 @@ libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % jacks
 libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % jacksonVersion
 libraryDependencies += "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion
 
-val akkaCoreVersion = "2.4.0"
+val akkaCoreVersion = "2.4.2"
 libraryDependencies += "com.typesafe.akka" %% "akka-actor" % akkaCoreVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-contrib" % akkaCoreVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % akkaCoreVersion % "test"
