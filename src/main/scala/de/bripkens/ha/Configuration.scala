@@ -22,19 +22,16 @@ object Configuration {
   }
 }
 
-@JsonCreator
 case class Configuration(@JsonProperty("endpoints") endpoints: Set[HealthCheckEndpoint],
                          @JsonProperty("reporters") reporters: Map[String, ReporterConfig],
                          @JsonProperty("akka") akkaConfig: Map[String, _ <: AnyRef])
 
-@JsonCreator
 case class HealthCheckEndpoint(@JsonProperty("url") url: String,
                                @JsonProperty("id") id: String,
                                @JsonProperty("name") name: String,
                                @JsonProperty("interval") interval: Int,
                                @JsonProperty("reporter") reporter: String)
 
-@JsonCreator
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
