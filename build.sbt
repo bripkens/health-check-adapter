@@ -15,7 +15,7 @@ libraryDependencies += "com.typesafe.akka" %% "akka-actor" % akkaCoreVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-contrib" % akkaCoreVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % akkaCoreVersion % "test"
 
-val akkaExtensionsVersion = "2.0-M1"
+val akkaExtensionsVersion = "2.0.3"
 libraryDependencies += "com.typesafe.akka" %% "akka-stream-experimental" % akkaExtensionsVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-http-core-experimental" % akkaExtensionsVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-http-experimental" % akkaExtensionsVersion
