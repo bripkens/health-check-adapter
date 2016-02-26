@@ -32,7 +32,7 @@ object App extends scala.App {
     implicit val system = ActorSystem("ha")
 
     // the AppActor gets us started from here on out
-    system.actorOf(Props(classOf[AppActor], mapper, configuration), "app")
+    system.actorOf(AppActor.props(mapper, configuration), AppActor.Name)
   }
 
   def reportCriticalInitialisationError(msg: String): Unit = {

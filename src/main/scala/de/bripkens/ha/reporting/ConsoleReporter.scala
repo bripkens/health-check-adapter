@@ -1,11 +1,17 @@
 package de.bripkens.ha.reporting
 
-import akka.actor.{ActorLogging, Actor}
+import akka.actor.{Props, ActorLogging, Actor}
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.bripkens.ha.ComponentStatus.ComponentStatus
 import de.bripkens.ha.{ComponentStatus, ComponentStatusUpdate, ConsoleReporterConfig}
 
 import scala.collection.mutable
+
+object ConsoleReporter {
+
+  def props(mapper: ObjectMapper, config: ConsoleReporterConfig) = Props(new ConsoleReporter(mapper, config))
+
+}
 
 class ConsoleReporter(val mapper: ObjectMapper, val config: ConsoleReporterConfig) extends Actor
                                                                                    with ActorLogging {
