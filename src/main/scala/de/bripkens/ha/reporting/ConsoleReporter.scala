@@ -37,7 +37,6 @@ class ConsoleReporter(val mapper: ObjectMapper, val config: ConsoleReporterConfi
         componentStatus.put(component.id, ComponentStatus.NOT_REACHABLE)
       }
     }
-    case unsupported => log.error(s"Unsupported message received: $unsupported")
   }
 
 }
