@@ -16,11 +16,11 @@ libraryDependencies += "com.typesafe.akka" %% "akka-contrib" % akkaCoreVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % akkaCoreVersion % "test"
 
 val akkaExtensionsVersion = "2.0-M1"
-libraryDependencies += "com.typesafe.akka" % "akka-stream-experimental_2.11" % akkaExtensionsVersion
-libraryDependencies += "com.typesafe.akka" % "akka-http-core-experimental_2.11" % akkaExtensionsVersion
-libraryDependencies += "com.typesafe.akka" % "akka-http-experimental_2.11" % akkaExtensionsVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-stream-experimental" % akkaExtensionsVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-http-core-experimental" % akkaExtensionsVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-http-experimental" % akkaExtensionsVersion
 
-libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 
 assemblyJarName in assembly := "health-check-adapter.jar"
 mainClass in assembly := Some("de.bripkens.ha.App")
