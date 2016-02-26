@@ -45,7 +45,6 @@ class SlackReporter(val mapper: ObjectMapper, val config: SlackReporterConfig) e
         log.warning(s"Retrieved status code ${response.status} from the Slack API")
       }
     }
-    case unsupported => log.error(s"Unsupported message received: $unsupported")
   }
 
   def onStatusChange(component: HealthCheckEndpoint,

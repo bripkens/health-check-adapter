@@ -63,6 +63,5 @@ class HealthCheckActor(val mapper: ObjectMapper,
     case failure: Failure => {
       reporter ! ComponentStatusUpdate(endpoint, ComponentStatus.NOT_REACHABLE)
     }
-    case unsupported => log.error(s"Unsupported message received: $unsupported")
   }
 }
