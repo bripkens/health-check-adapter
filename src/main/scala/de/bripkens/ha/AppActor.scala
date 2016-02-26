@@ -36,7 +36,6 @@ class AppActor(val mapper: ObjectMapper, val config: Configuration) extends Acto
     )
   }
 
-  override def receive: Receive = {
-    case unsupported => log.error(s"Unsupported message received: $unsupported")
-  }
+  override def receive = Actor.emptyBehavior
+
 }
