@@ -1,9 +1,11 @@
 package de.bripkens.ha
 
-import java.nio.file.{Paths, NoSuchFileException}
+import java.nio.file.{NoSuchFileException, Paths}
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.ActorSystem
 import com.fasterxml.jackson.databind.JsonMappingException
+
+import scala.util.{Failure, Success}
 
 object App extends scala.App {
 
@@ -17,13 +19,13 @@ object App extends scala.App {
   Console.out.println(s"Starting with config file $configPath")
 
   Configuration.load(Paths.get(configPath)) match {
-    case Left(e: NoSuchFileException) => reportCriticalInitialisationError(
+    case Success(configuration) => startActorSystem(configuration)
+    case Failure(e: NoSuchFileException) => reportCriticalInitialisationError(
       s"Config file $configPath does not exist."
     )
-    case Left(e: JsonMappingException) => reportCriticalInitialisationError(
+    case Failure(e: JsonMappingException) => reportCriticalInitialisationError(
       s"Config file $configPath could not be parsed. Error: ${e.getMessage}"
     )
-    case Right(configuration) => startActorSystem(configuration)
   }
 
   def startActorSystem(configuration: Configuration) = {
