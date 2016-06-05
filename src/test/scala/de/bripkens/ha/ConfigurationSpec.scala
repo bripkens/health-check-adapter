@@ -3,9 +3,9 @@ package de.bripkens.ha
 import java.nio.file.{NoSuchFileException, Paths}
 
 import com.fasterxml.jackson.databind.JsonMappingException
-import org.scalatest.{EitherValues, Matchers, WordSpec}
+import org.scalatest.{Matchers, WordSpec, TryValues}
 
-class ConfigurationSpec extends WordSpec with Matchers with EitherValues {
+class ConfigurationSpec extends WordSpec with Matchers with TryValues {
 
   "Configuration" when {
 
@@ -13,8 +13,8 @@ class ConfigurationSpec extends WordSpec with Matchers with EitherValues {
 
       val path = Paths.get(getClass.getResource("test-config.yml").toURI)
       val loaded = Configuration.load(path)
-      loaded should be('right)
-      val configuration = loaded.right.get
+      loaded should be a 'success
+      val configuration = loaded.success.value
 
       "have two endpoints" in {
         configuration.endpoints should have size 2
@@ -53,8 +53,8 @@ class ConfigurationSpec extends WordSpec with Matchers with EitherValues {
         val path = Paths.get("/does/not/exist")
 
         val loaded = Configuration.load(path)
-        loaded should be('left)
-        loaded.left.value shouldBe a[NoSuchFileException]
+        loaded should be a 'failure
+        loaded.failure.exception shouldBe a[NoSuchFileException]
       }
     }
 
@@ -64,8 +64,8 @@ class ConfigurationSpec extends WordSpec with Matchers with EitherValues {
         val path = Paths.get(getClass.getResource("broken-config.yml").toURI)
 
         val loaded = Configuration.load(path)
-        loaded should be('left)
-        loaded.left.value shouldBe a[JsonMappingException]
+        loaded should be a 'failure
+        loaded.failure.exception shouldBe a[JsonMappingException]
       }
     }
   }

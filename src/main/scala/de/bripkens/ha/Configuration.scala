@@ -1,24 +1,24 @@
 package de.bripkens.ha
 
-import java.nio.file.{Files, NoSuchFileException, Path}
+import java.nio.file.{Files, Path}
 
-import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty, JsonSubTypes, JsonTypeInfo}
-import com.fasterxml.jackson.databind.{JsonMappingException, ObjectMapper}
+import com.fasterxml.jackson.annotation.{JsonProperty, JsonSubTypes, JsonTypeInfo}
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 
-import scala.util.control.Exception._
+import scala.util.Try
 
 object Configuration {
 
-  def load(path: Path): Either[Throwable, Configuration] = {
+  def load(path: Path): Try[Configuration] = {
     val yamlMapper = new ObjectMapper(new YAMLFactory())
     yamlMapper.registerModule(DefaultScalaModule)
 
-    catching(classOf[NoSuchFileException], classOf[JsonMappingException]) either {
+    Try({
       val content = String.join("\n", Files.readAllLines(path))
       yamlMapper.readValue(content, classOf[Configuration])
-    }
+    })
   }
 }
 
