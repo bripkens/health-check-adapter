@@ -1,12 +1,28 @@
+/*
+ * Copyright 2016 Ben Ripkens
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.bripkens.ha.reporting
 
-import akka.actor.{Props, ActorLogging, Actor}
+import akka.actor.{ Props, ActorLogging, Actor }
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.stream.scaladsl.ImplicitMaterializer
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.bripkens.ha.ComponentStatus._
-import de.bripkens.ha.{HealthCheckEndpoint, ComponentStatus, ComponentStatusUpdate, SlackReporterConfig}
+import de.bripkens.ha.{ HealthCheckEndpoint, ComponentStatus, ComponentStatusUpdate, SlackReporterConfig }
 
 import scala.collection.mutable
 
@@ -17,8 +33,8 @@ object SlackReporter {
 }
 
 class SlackReporter(val mapper: ObjectMapper, val config: SlackReporterConfig) extends Actor
-                                                                               with ActorLogging
-                                                                               with ImplicitMaterializer {
+    with ActorLogging
+    with ImplicitMaterializer {
 
   import context.dispatcher
 
@@ -47,9 +63,11 @@ class SlackReporter(val mapper: ObjectMapper, val config: SlackReporterConfig) e
     }
   }
 
-  def onStatusChange(component: HealthCheckEndpoint,
-                     status: ComponentStatus,
-                     onChange: (HealthCheckEndpoint) => Unit): Unit = {
+  def onStatusChange(
+    component: HealthCheckEndpoint,
+    status: ComponentStatus,
+    onChange: (HealthCheckEndpoint) => Unit
+  ): Unit = {
     if (!componentStatus.get(component.id).contains(status)) {
       componentStatus.put(component.id, status)
       onChange(component)
@@ -89,8 +107,10 @@ class SlackReporter(val mapper: ObjectMapper, val config: SlackReporterConfig) e
       "channel" -> config.channel,
       "attachments" -> List(attachment)
     )
-    val entity = HttpEntity(ContentType(MediaTypes.`application/json`),
-      mapper.writeValueAsString(payload))
+    val entity = HttpEntity(
+      ContentType(MediaTypes.`application/json`),
+      mapper.writeValueAsString(payload)
+    )
     http.singleRequest(HttpRequest(uri = config.webhookUrl, entity = entity)).pipeTo(self)
   }
 
