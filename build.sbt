@@ -15,10 +15,10 @@ libraryDependencies += "com.typesafe.akka" %% "akka-http-core-experimental" % ak
 libraryDependencies += "com.typesafe.akka" %% "akka-http-experimental" % akkaExtensionsVersion
 
 libraryDependencies ++= Vector(
-  Library.jacksonCore,
-  Library.jacksonDatabind,
-  Library.jacksonDataformantYaml,
-  Library.jacksonModuleScala,
+  Library.Jackson.core,
+  Library.Jackson.databind,
+  Library.Jackson.dataformatYaml,
+  Library.Jackson.moduleScala,
 
   Library.scalaTest % "test"
 )

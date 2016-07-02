@@ -7,10 +7,13 @@ object Version {
 }
 
 object Library {
-  val jacksonCore = "com.fasterxml.jackson.core" % "jackson-core" % Version.JacksonVersion
-  val jacksonDatabind = "com.fasterxml.jackson.core" % "jackson-databind" % Version.JacksonVersion
-  val jacksonDataformantYaml = "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % Version.JacksonVersion
-  val jacksonModuleScala = "com.fasterxml.jackson.module" %% "jackson-module-scala" % Version.JacksonVersion
+
+  object Jackson {
+    val core            = "com.fasterxml.jackson.core"        %  "jackson-core"             % Version.JacksonVersion
+    val databind        = "com.fasterxml.jackson.core"        %  "jackson-databind"         % Version.JacksonVersion
+    val dataformatYaml  = "com.fasterxml.jackson.dataformat"  %  "jackson-dataformat-yaml"  % Version.JacksonVersion
+    val moduleScala     = "com.fasterxml.jackson.module"      %% "jackson-module-scala"     % Version.JacksonVersion
+  }
 
   val scalaTest = "org.scalatest" %% "scalatest" % Version.ScalaTest
 }
