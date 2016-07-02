@@ -1,8 +1,9 @@
+lazy val healthCheckAdapter = project
+  .copy(id = "health-check-adapter")
+  .in(file("."))
+  .enablePlugins(AutomateHeaderPlugin, GitVersioning)
+
 name := "health-check-adapter"
-
-version := "1.0"
-
-scalaVersion := "2.11.7"
 
 libraryDependencies ++= Vector(
   Library.Jackson.core,
@@ -20,5 +21,5 @@ libraryDependencies ++= Vector(
   Library.scalaTest % "test"
 )
 
-assemblyJarName in assembly := "health-check-adapter.jar"
-mainClass in assembly := Some("de.bripkens.ha.App")
+initialCommands := """|import de.bripkens.ha._
+                      |""".stripMargin
