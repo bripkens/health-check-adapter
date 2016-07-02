@@ -20,7 +20,9 @@ libraryDependencies += "com.typesafe.akka" %% "akka-stream-experimental" % akkaE
 libraryDependencies += "com.typesafe.akka" %% "akka-http-core-experimental" % akkaExtensionsVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-http-experimental" % akkaExtensionsVersion
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
+libraryDependencies ++= Vector(
+  Library.scalaTest % "test"
+)
 
 assemblyJarName in assembly := "health-check-adapter.jar"
 mainClass in assembly := Some("de.bripkens.ha.App")
