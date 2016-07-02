@@ -4,11 +4,6 @@ version := "1.0"
 
 scalaVersion := "2.11.7"
 
-val akkaCoreVersion = "2.4.2"
-libraryDependencies += "com.typesafe.akka" %% "akka-actor" % akkaCoreVersion
-libraryDependencies += "com.typesafe.akka" %% "akka-contrib" % akkaCoreVersion
-libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % akkaCoreVersion % "test"
-
 val akkaExtensionsVersion = "2.0.3"
 libraryDependencies += "com.typesafe.akka" %% "akka-stream-experimental" % akkaExtensionsVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-http-core-experimental" % akkaExtensionsVersion
@@ -19,6 +14,10 @@ libraryDependencies ++= Vector(
   Library.Jackson.databind,
   Library.Jackson.dataformatYaml,
   Library.Jackson.moduleScala,
+
+  Library.Akka.actor,
+  Library.Akka.contrib,
+  Library.Akka.testkit % "test",
 
   Library.scalaTest % "test"
 )
