@@ -4,12 +4,6 @@ version := "1.0"
 
 scalaVersion := "2.11.7"
 
-val jacksonVersion = "2.6.3"
-libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion
-libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion
-libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % jacksonVersion
-libraryDependencies += "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion
-
 val akkaCoreVersion = "2.4.2"
 libraryDependencies += "com.typesafe.akka" %% "akka-actor" % akkaCoreVersion
 libraryDependencies += "com.typesafe.akka" %% "akka-contrib" % akkaCoreVersion
@@ -21,6 +15,11 @@ libraryDependencies += "com.typesafe.akka" %% "akka-http-core-experimental" % ak
 libraryDependencies += "com.typesafe.akka" %% "akka-http-experimental" % akkaExtensionsVersion
 
 libraryDependencies ++= Vector(
+  Library.jacksonCore,
+  Library.jacksonDatabind,
+  Library.jacksonDataformantYaml,
+  Library.jacksonModuleScala,
+
   Library.scalaTest % "test"
 )
 
