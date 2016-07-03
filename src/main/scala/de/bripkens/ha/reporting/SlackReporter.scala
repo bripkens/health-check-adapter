@@ -16,13 +16,13 @@
 
 package de.bripkens.ha.reporting
 
-import akka.actor.{ Props, ActorLogging, Actor }
+import akka.actor.{ Actor, ActorLogging, Props }
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
-import akka.stream.scaladsl.ImplicitMaterializer
+import akka.stream.{ ActorMaterializer, ActorMaterializerSettings }
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.bripkens.ha.ComponentStatus._
-import de.bripkens.ha.{ HealthCheckEndpoint, ComponentStatus, ComponentStatusUpdate, SlackReporterConfig }
+import de.bripkens.ha.{ ComponentStatus, ComponentStatusUpdate, HealthCheckEndpoint, SlackReporterConfig }
 
 import scala.collection.mutable
 
@@ -33,14 +33,15 @@ object SlackReporter {
 }
 
 class SlackReporter(val mapper: ObjectMapper, val config: SlackReporterConfig) extends Actor
-    with ActorLogging
-    with ImplicitMaterializer {
+    with ActorLogging {
 
   import context.dispatcher
 
   // make the pipeTo method available (requires the ExecutionContextExecutor)
   // on Future
   import akka.pattern.pipe
+
+  final implicit val materializer: ActorMaterializer = ActorMaterializer(ActorMaterializerSettings(context.system))
 
   val componentStatus = new mutable.HashMap[String, ComponentStatus]()
 
