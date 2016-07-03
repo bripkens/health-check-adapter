@@ -19,11 +19,11 @@ package de.bripkens.ha
 import java.util.concurrent.TimeUnit
 
 import akka.actor.Status.Failure
-import akka.actor.{ Props, Actor, ActorLogging, ActorRef }
+import akka.actor.{ Actor, ActorLogging, ActorRef, Props }
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{ HttpRequest, HttpResponse, StatusCodes }
 import akka.pattern.after
-import akka.stream.scaladsl.ImplicitMaterializer
+import akka.stream.{ ActorMaterializer, ActorMaterializerSettings }
 import com.fasterxml.jackson.databind.ObjectMapper
 
 import scala.concurrent.duration._
@@ -45,14 +45,15 @@ class HealthCheckActor(
   val endpoint: HealthCheckEndpoint,
   val reporter: ActorRef
 ) extends Actor
-    with ActorLogging
-    with ImplicitMaterializer {
+    with ActorLogging {
 
   import context.dispatcher
 
   // make the pipeTo method available (requires the ExecutionContextExecutor)
   // on Future
   import akka.pattern.pipe
+
+  final implicit val materializer: ActorMaterializer = ActorMaterializer(ActorMaterializerSettings(context.system))
 
   private val http = Http(context.system)
 
