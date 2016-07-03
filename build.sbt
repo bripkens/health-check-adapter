@@ -1,26 +1,25 @@
+lazy val healthCheckAdapter = project
+  .copy(id = "health-check-adapter")
+  .in(file("."))
+  .enablePlugins(AutomateHeaderPlugin, GitVersioning)
+
 name := "health-check-adapter"
 
-version := "1.0"
+libraryDependencies ++= Vector(
+  Library.Jackson.core,
+  Library.Jackson.databind,
+  Library.Jackson.dataformatYaml,
+  Library.Jackson.moduleScala,
 
-scalaVersion := "2.11.7"
+  Library.Akka.actor,
+  Library.Akka.contrib,
+  Library.Akka.stream,
+  Library.Akka.httpCore,
+  Library.Akka.http,
+  Library.Akka.testkit % "test",
 
-val jacksonVersion = "2.6.3"
-libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion
-libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion
-libraryDependencies += "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % jacksonVersion
-libraryDependencies += "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion
+  Library.scalaTest % "test"
+)
 
-val akkaCoreVersion = "2.4.2"
-libraryDependencies += "com.typesafe.akka" %% "akka-actor" % akkaCoreVersion
-libraryDependencies += "com.typesafe.akka" %% "akka-contrib" % akkaCoreVersion
-libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % akkaCoreVersion % "test"
-
-val akkaExtensionsVersion = "2.0.3"
-libraryDependencies += "com.typesafe.akka" %% "akka-stream-experimental" % akkaExtensionsVersion
-libraryDependencies += "com.typesafe.akka" %% "akka-http-core-experimental" % akkaExtensionsVersion
-libraryDependencies += "com.typesafe.akka" %% "akka-http-experimental" % akkaExtensionsVersion
-
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
-
-assemblyJarName in assembly := "health-check-adapter.jar"
-mainClass in assembly := Some("de.bripkens.ha.App")
+initialCommands := """|import de.bripkens.ha._
+                      |""".stripMargin
