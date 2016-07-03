@@ -3,6 +3,7 @@
 
 [![Docker Layer Info](https://badge.imagelayers.io/bripkens/health-check-adapter:latest.svg)](https://imagelayers.io/?images=bripkens/health-check-adapter:latest 'Get your own badge on imagelayers.io') 
 [![Build Status](https://travis-ci.org/bripkens/health-check-adapter.svg)](https://travis-ci.org/bripkens/health-check-adapter)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d40c3012631b4b53b6bb0c7420c2c06d)](https://www.codacy.com/app/britter/health-check-adapter?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bripkens/health-check-adapter&amp;utm_campaign=Badge_Grade)
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
 This application connects to one or more applications and
